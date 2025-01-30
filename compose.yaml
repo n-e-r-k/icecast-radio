@@ -1,0 +1,25 @@
+services:
+  icecast:
+    image:  docker.io/infiniteproject/icecast
+    container_name: icecast
+    environment:
+      - ICECAST_ADMIN_USERNAME=admin
+      - ICECAST_ADMIN_PASSWORD=password123
+      - ICECAST_SOURCE_PASSWORD=password123
+      - ICECAST_MAX_SOURCES=16
+      - ICECAST_MAX_CLIENTS=16
+    ports:
+      - 8000:8000
+  
+  nerksys-radio:
+    image: radio:latest
+    build: ./src
+    container_name: nerksys-radio
+    environment:
+      - ICECAST_HOST=icecast
+      - ICECAST_PORT=8000
+      - USER=source
+      - PASSWORD=password123
+      - DIRECTORY=/data
+    volumes:
+      - /home/nerk/Desktop/testing_songs:/data
